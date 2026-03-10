@@ -1,0 +1,30 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: identity
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/identity_db
+    username: clutchadmin
+    password: secret
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    check-location: false
+debug: true
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+

@@ -1,0 +1,47 @@
+# clutch-platform/templates/microservices.yaml
+
+{{- range .Values.services }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .name }}
+    spec:
+      containers:
+        - name: {{ .name }}
+          image: {{ .image }}
+          imagePullPolicy: Never # 🚨 Forces K8s to use your local Docker images!
+          ports:
+            - containerPort: {{ .port }}
+
+          # Only inject database variables if the app actually needs a database (skips frontend)
+          {{- if ne .dbName "none" }}
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres-db:5432/{{ .dbName }}
+            - name: SPRING_DATASOURCE_USERNAME
+              value: {{ $.Values.postgres.user }}
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: {{ $.Values.postgres.password }}
+          {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+spec:
+  selector:
+    app: {{ .name }}
+  ports:
+    - port: {{ .port }}
+      targetPort: {{ .port }}
+---
+{{- end }}

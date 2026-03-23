@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # 1. The Database
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: clutch-postgres
+    environment:
+      POSTGRES_USER: clutchadmin
+      POSTGRES_PASSWORD: secret
+      # Notice we removed POSTGRES_DB here so it defaults to the user
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      # 🚨 ADD THIS LINE to run the init script on startup
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - clutch-network
+
+  # 2. Identity Service
+  identity-service:
+    build:
+      context: ./identity
+      dockerfile: Dockerfile
+    image: clutch-identity:latest
+    container_name: clutch-identity
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres-db
+    environment:
+      # 🚨 FIX: Changed localhost to postgres-db, and DB to clutch_postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/identity_db
+      - SPRING_DATASOURCE_USERNAME=clutchadmin
+      - SPRING_DATASOURCE_PASSWORD=secret
+    networks:
+      - clutch-network
+
+  # 3. Academic Service
+  academic-service:
+    build:
+      context: ./academic-service
+      dockerfile: Dockerfile
+    image: clutch-academic:latest
+    container_name: clutch-academic
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres-db
+    environment:
+      # 🚨 FIX: Changed localhost to postgres-db, and DB to clutch_postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/academic_db
+      - SPRING_DATASOURCE_USERNAME=clutchadmin
+      - SPRING_DATASOURCE_PASSWORD=secret
+    networks:
+      - clutch-network
+
+  # 4. Placement Service
+  placement-service:
+    build:
+      context: ./placement-service
+      dockerfile: Dockerfile
+    image: clutch-placement:latest
+    container_name: clutch-placement
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres-db
+    environment:
+      # 🚨 FIX: Changed localhost to postgres-db, and DB to clutch_postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/placement_db
+      - SPRING_DATASOURCE_USERNAME=clutchadmin
+      - SPRING_DATASOURCE_PASSWORD=secret
+    networks:
+      - clutch-network
+
+  # 5. The React Frontend
+  frontend:
+    build:
+      context: ../clutch-frontend
+      dockerfile: Dockerfile
+    image: clutch-frontend:latest
+    container_name: clutch-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - identity-service
+      - academic-service
+      - placement-service
+    networks:
+      - clutch-network
+
+# Define persistent storage and internal networking
+volumes:
+  postgres-data:
+
+networks:
+  clutch-network:
+    driver: bridge

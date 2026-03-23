@@ -1,0 +1,94 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: clutch-ingress
+  namespace: clutch-env
+  annotations:
+    # Allows massive CSV file uploads without NGINX throwing a 413 error
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+spec:
+  rules:
+    - http:
+        paths:
+          # ==========================================
+          # IDENTITY SERVICE (Port 8081)
+          # ==========================================
+          - path: /api/v1/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: identity-service
+                port: { number: 8081 }
+          - path: /api/v1/admin
+            pathType: Prefix
+            backend:
+              service:
+                name: identity-service
+                port: { number: 8081 }
+          - path: /api/v1/colleges
+            pathType: Prefix
+            backend:
+              service:
+                name: identity-service
+                port: { number: 8081 }
+          - path: /api/v1/users
+            pathType: Prefix
+            backend:
+              service:
+                name: identity-service
+                port: { number: 8081 }
+
+          # ==========================================
+          # ACADEMIC SERVICE (Port 8082)
+          # ==========================================
+          - path: /api/v1/academic
+            pathType: Prefix
+            backend:
+              service:
+                name: academic-service
+                port: { number: 8082 }
+          - path: /api/v1/attendance
+            pathType: Prefix
+            backend:
+              service:
+                name: academic-service
+                port: { number: 8082 }
+          - path: /api/v1/sections
+            pathType: Prefix
+            backend:
+              service:
+                name: academic-service
+                port: { number: 8082 }
+          - path: /api/v1/subjects
+            pathType: Prefix
+            backend:
+              service:
+                name: academic-service
+                port: { number: 8082 }
+          - path: /api/v1/blocks
+            pathType: Prefix
+            backend:
+              service:
+                name: academic-service
+                port: { number: 8082 }
+
+          # ==========================================
+          # PLACEMENT SERVICE (Port 8083)
+          # ==========================================
+          - path: /api/v1/placement
+            pathType: Prefix
+            backend:
+              service:
+                name: placement-service
+                port: { number: 8083 }
+
+          # ==========================================
+          # FRONTEND (Catch-All for React UI)
+          # MUST BE AT THE BOTTOM!
+          # ==========================================
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: clutch-frontend
+                port: { number: 80 }

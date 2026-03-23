@@ -1,15 +1,28 @@
 import React from 'react';
-import { Clock, MapPin, CheckCircle } from 'lucide-react';
+import { Clock, MapPin, CheckCircle, Lock, CalendarClock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 /**
  * ScheduleCard Component
  * Represents a single class block in the teacher's daily operational view.
- * Handles the critical routing logic, passing the required context (sectionId, date, edit mode)
- * to the MarkAttendance screen via the React Router state payload.
+ * Now powered by the Time Engine (buttonConfig) to handle Past, Present, and Future states.
  */
-export default function ScheduleCard({ blockId, subject, section, time, isCompleted, sectionId, currentDate }) {
+export default function ScheduleCard({ blockId, subject, section, time, isCompleted, sectionId, currentDate, buttonConfig }) {
   const navigate = useNavigate();
+
+  // Smart routing logic based on the Time Engine state
+  const handleNavigation = () => {
+    // Failsafe: If the button is disabled (Future or Locked), do nothing
+    if (buttonConfig.disabled) return;
+
+    if (buttonConfig.state === 'submitted') {
+      // Trigger Edit Mode data hydration pipeline
+      navigate(`/attendance/${blockId}`, { state: { sectionId, savedDate: currentDate, isEditMode: true } });
+    } else {
+      // Standard routing for a fresh submission (Today or Late)
+      navigate(`/attendance/${blockId}`, { state: { sectionId, savedDate: currentDate } });
+    }
+  };
 
   return (
     <div className="bg-surface p-5 rounded-xl border border-slate-100 shadow-sm hover:shadow-soft transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -35,24 +48,18 @@ export default function ScheduleCard({ blockId, subject, section, time, isComple
 
       {/* Action Area & Routing Logic */}
       <div>
-        {isCompleted ? (
-          <button 
-            // Routes to the attendance page AND triggers the "Edit Mode" data hydration pipeline
-            onClick={() => navigate(`/attendance/${blockId}`, { state: { sectionId, savedDate: currentDate, isEditMode: true } })}
-            className="flex items-center justify-center w-full md:w-auto gap-2 text-green-700 font-bold bg-green-100 hover:bg-green-200 px-4 py-2 rounded-lg transition-colors border border-green-200"
-          >
-            <CheckCircle size={18} />
-            <span>Submitted (Edit)</span>
-          </button>
-        ) : (
-          <button 
-            // Standard routing for a fresh attendance submission
-            onClick={() => navigate(`/attendance/${blockId}`, { state: { sectionId, savedDate: currentDate } })}
-            className="w-full md:w-auto bg-clutch-50 text-clutch-800 hover:bg-clutch-100 font-semibold py-2 px-6 rounded-lg transition-colors border border-clutch-200"
-          >
-            Take Attendance
-          </button>
-        )}
+        <button 
+          disabled={buttonConfig.disabled}
+          onClick={handleNavigation}
+          className={`flex items-center justify-center w-full md:w-auto gap-2 px-4 py-2 font-bold rounded-lg transition-colors ${buttonConfig.colorClass}`}
+        >
+          {/* Render dynamic icons based on the Time Engine state */}
+          {buttonConfig.state === 'submitted' && <CheckCircle size={18} />}
+          {buttonConfig.state === 'locked' && <Lock size={18} />}
+          {buttonConfig.state === 'late' && <CalendarClock size={18} />}
+          
+          <span>{buttonConfig.text}</span>
+        </button>
       </div>
     </div>
   );

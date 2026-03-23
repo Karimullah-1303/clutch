@@ -14,7 +14,7 @@ public class UserProfileDto {
     private UUID id;
     private String email;
     private String role;
-
+    private UUID collegeId;
     // Add these two missing fields so the getters work!
     private String name;
     private String rollNumber;

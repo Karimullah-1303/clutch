@@ -10,13 +10,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * AcademicAdminService
  * Handles the bulk provisioning of the university's core academic data via CSV uploads.
- * Uses @Transactional to ensure that if a CSV fails halfway through, the database rolls back
- * to prevent corrupted, partial states.
+ * Upgraded to multi-tenant architecture (dynamic college ID) and high-performance batch saving.
  */
 @Service
 @RequiredArgsConstructor
@@ -27,15 +28,13 @@ public class AcademicAdminService {
     private final TimetableBlockRepository timetableBlockRepository;
     private final StudentEnrollmentRepository enrollmentRepository;
 
-    // Hardcoded authoritative ID for Andhra University.
-    // In a multi-tenant SaaS architecture, this would be dynamically extracted from the Admin's JWT token.
-    private final UUID ANDHRA_UNIV_ID = UUID.fromString("bb12e7cf-b357-407d-a417-c43d014758e7");
-
     /**
      * Parses and provisions the Subject Catalog (e.g., OOSE, DSA).
      */
     @Transactional
     public void processSubjectsCsv(MultipartFile file) {
+        List<Subject> subjectsToSave = new ArrayList<>();
+
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String line;
             br.readLine(); // Skip header row: CourseCode,Name
@@ -47,8 +46,11 @@ public class AcademicAdminService {
                 subject.setCourseCode(data[0].trim());
                 subject.setName(data[1].trim());
 
-                subjectRepository.save(subject);
+                subjectsToSave.add(subject);
             }
+            // 🚀 BATCH SAVE: Pushes all records to the DB in one shot
+            subjectRepository.saveAll(subjectsToSave);
+
         } catch (Exception e) {
             throw new RuntimeException("CSV Error processing subjects: " + e.getMessage());
         }
@@ -59,7 +61,9 @@ public class AcademicAdminService {
      * Links a Teacher UUID to a specific Subject and Section on a specific day.
      */
     @Transactional
-    public void processTimetableCsv(MultipartFile file) {
+    public void processTimetableCsv(MultipartFile file, UUID collegeId) {
+        List<TimetableBlock> blocksToSave = new ArrayList<>();
+
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String line;
             br.readLine(); // Skip header row
@@ -83,7 +87,7 @@ public class AcademicAdminService {
                         .orElseGet(() -> {
                             Section newSection = new Section();
                             newSection.setName(sectionName);
-                            newSection.setCollegeId(ANDHRA_UNIV_ID);
+                            newSection.setCollegeId(collegeId); // 🚨 Dynamic tenant ID injected here
                             return sectionRepository.save(newSection);
                         });
 
@@ -96,8 +100,11 @@ public class AcademicAdminService {
                 block.setStartTime(startTime);
                 block.setEndTime(endTime);
 
-                timetableBlockRepository.save(block);
+                blocksToSave.add(block);
             }
+            // 🚀 BATCH SAVE
+            timetableBlockRepository.saveAll(blocksToSave);
+
         } catch (Exception e) {
             throw new RuntimeException("CSV Error processing timetables: " + e.getMessage());
         }
@@ -108,7 +115,9 @@ public class AcademicAdminService {
      * Links a Student UUID to a specific Section.
      */
     @Transactional
-    public void processEnrollmentsCsv(MultipartFile file) {
+    public void processEnrollmentsCsv(MultipartFile file, UUID collegeId) {
+        List<StudentEnrollment> enrollmentsToSave = new ArrayList<>();
+
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String line;
             br.readLine(); // Skip header row
@@ -124,7 +133,7 @@ public class AcademicAdminService {
                         .orElseGet(() -> {
                             Section newSection = new Section();
                             newSection.setName(sectionName);
-                            newSection.setCollegeId(ANDHRA_UNIV_ID);
+                            newSection.setCollegeId(collegeId); // 🚨 Dynamic tenant ID injected here
                             return sectionRepository.save(newSection);
                         });
 
@@ -133,8 +142,11 @@ public class AcademicAdminService {
                 enrollment.setStudentId(studentId);
                 enrollment.setSection(section);
 
-                enrollmentRepository.save(enrollment);
+                enrollmentsToSave.add(enrollment);
             }
+            // 🚀 BATCH SAVE
+            enrollmentRepository.saveAll(enrollmentsToSave);
+
         } catch (Exception e) {
             throw new RuntimeException("CSV Error processing enrollments: " + e.getMessage());
         }

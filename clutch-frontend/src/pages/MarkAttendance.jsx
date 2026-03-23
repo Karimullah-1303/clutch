@@ -39,8 +39,7 @@ export default function MarkAttendance() {
         const token = localStorage.getItem('clutch_token');
         
         // --- STEP 1: Fetch relationships (Academy Service) ---
-        // Get the UUIDs of students enrolled in this specific section
-        const academicRes = await axios.get(`http://localhost:8082/api/v1/sections/${sectionId}/students`, {
+        const academicRes = await axios.get(`/api/v1/sections/${sectionId}/students`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const studentIds = academicRes.data;
@@ -51,34 +50,29 @@ export default function MarkAttendance() {
         }
 
         // --- STEP 2: Hydrate Data (Identity Service) ---
-        // Fetch the actual names and roll numbers using a batch POST request
-        const identityRes = await axios.post(`http://localhost:8081/api/v1/users/batch`, studentIds, {
+        const identityRes = await axios.post(`/api/v1/users/batch`, studentIds, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
         const realStudents = identityRes.data;
         setStudents(realStudents);
         
-        // Create an initial state dictionary defaulting everyone to PRESENT (true)
         let initialAttendance = {};
         realStudents.forEach(s => initialAttendance[s.id] = true);
 
         // --- STEP 3: Edit Mode Override ---
-        // If editing, fetch the historical database records and override the default "true" values
         if (isEditMode) {
             const dateStr = new Date(savedDate).toISOString().split('T')[0]; 
             
-            const recordsRes = await axios.get(`http://localhost:8082/api/v1/attendance/block/${blockId}?date=${dateStr}`, {
+            const recordsRes = await axios.get(`/api/v1/attendance/block/${blockId}?date=${dateStr}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             
-            // Map the past DB status ("PRESENT" / "ABSENT") back to our boolean toggle state
             recordsRes.data.forEach(record => {
                 initialAttendance[record.studentId] = record.status === "PRESENT";
             });
         }
 
-        // Apply final compiled state to the UI
         setAttendance(initialAttendance);
 
       } catch (error) {
@@ -91,9 +85,6 @@ export default function MarkAttendance() {
     fetchStudentsAndRecords();
   }, [sectionId, isEditMode, savedDate, blockId]);
 
-  /**
-   * Toggles an individual student's presence state in the local dictionary.
-   */
   const handleToggle = (studentId) => {
     setAttendance((prev) => ({ ...prev, [studentId]: !prev[studentId] }));
   };
@@ -106,15 +97,20 @@ export default function MarkAttendance() {
     const token = localStorage.getItem('clutch_token');
 
     try {
+      // 🚨 CRITICAL FIX: Ensure the date is formatted strictly as YYYY-MM-DD for Spring Boot
+      const formattedDate = new Date(savedDate).toISOString().split('T')[0];
+
       const batchPayload = {
         blockId: blockId,
+        date: formattedDate, // 🚨 NEW: Passing the exact target date to the backend!
         records: students.map(student => ({
           studentId: student.id,
           status: attendance[student.id] ? "PRESENT" : "ABSENT"
         }))
       };
 
-      await axios.post('http://localhost:8082/api/v1/attendance', batchPayload, {
+      // Ensure your backend endpoint in AcademyAdminController is actually mapped to POST /api/v1/attendance
+      await axios.post('/api/v1/attendance', batchPayload, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -125,7 +121,10 @@ export default function MarkAttendance() {
 
     } catch (error) {
       console.error("Failed to save batch attendance:", error);
-      alert("Error saving attendance. Check your console.");
+      
+      // Better error handling to catch our custom InvalidDateException from the backend!
+      const errorMsg = error.response?.data?.message || "Error saving attendance. Check your console.";
+      alert(errorMsg);
     } finally {
       setIsSubmitting(false);
     }
@@ -135,7 +134,6 @@ export default function MarkAttendance() {
 
   return (
     <div className="max-w-4xl mx-auto animate-fade-in">
-      {/* Navigation Header */}
       <button onClick={() => navigate('/dashboard', { state: { savedDate } })} className="flex items-center gap-2 text-slate-500 hover:text-clutch-600 mb-6 font-medium transition-colors">
         <ArrowLeft size={18} /> Back to Schedule
       </button>
@@ -150,7 +148,6 @@ export default function MarkAttendance() {
         </div>
       </div>
 
-      {/* Roster View State Handling */}
       {isLoading ? (
           <div className="text-center p-8 text-slate-500">Fetching live student data...</div>
       ) : students.length === 0 ? (

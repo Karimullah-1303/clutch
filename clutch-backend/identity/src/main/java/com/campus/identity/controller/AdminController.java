@@ -48,8 +48,10 @@ public class AdminController {
     }
 
     @PostMapping("/upload-users")
-    public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) {
-        adminService.processUsersCsv(file);
+    public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file, Principal principal) {
+        // 🚨 FIX: Dynamically fetch the college ID and pass it to the service
+        UUID collegeId = getAdminCollegeId(principal);
+        adminService.processUsersCsv(file, collegeId);
         return ResponseEntity.ok("Users uploaded successfully!");
     }
 

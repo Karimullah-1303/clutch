@@ -16,4 +16,6 @@ public interface TimetableBlockRepository extends JpaRepository<TimetableBlock, 
     List<TimetableBlock> findAllBySectionId(UUID sectionId);
 
     List<TimetableBlock> findByTeacherId(UUID teacherId);
+
+    List<TimetableBlock> findBySectionNameIn(List<String> sectionNames);
 }

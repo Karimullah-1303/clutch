@@ -8,6 +8,7 @@ import com.campus.academyservice.entity.enums.AttendanceStatus;
 import com.campus.academyservice.repo.AttendanceRecordRepository;
 import com.campus.academyservice.repo.ClassSessionRepository;
 import com.campus.academyservice.repo.TimetableBlockRepository;
+import com.campus.academyservice.service.StudentAcademicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class TimetableBlockController {
     private final TimetableBlockRepository blockRepository;
     private final ClassSessionRepository sessionRepository;
     private final AttendanceRecordRepository attendanceRepository;
-
+    private final StudentAcademicService studentAcademicService;
     @PostMapping
     public ResponseEntity<TimetableBlock> createBlock(@RequestBody TimetableBlock block) {
         return ResponseEntity.ok(blockRepository.save(block));
@@ -54,7 +55,7 @@ public class TimetableBlockController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         // 1. Resolve the requested calendar date to an enumerated day (e.g., "MONDAY")
-        String dayOfWeek = date.getDayOfWeek().name();
+        String dayOfWeek = date.getDayOfWeek().name().substring(0,3);
 
         // 2. Fetch the "Blueprint" classes scheduled for this day
         List<TimetableBlock> blocksToday = blockRepository.findAllByTeacherIdAndDayOfWeek(teacherId, dayOfWeek);
@@ -96,5 +97,10 @@ public class TimetableBlockController {
         }).collect(Collectors.toList());
 
         return ResponseEntity.ok(schedule);
+    }
+
+    @GetMapping("student/{studentId}/timetable")
+    public ResponseEntity<List<TimetableBlock>> getStudentTimetable(@PathVariable UUID studentId) {
+        return ResponseEntity.ok(studentAcademicService.getTimetableForStudent(studentId));
     }
 }

@@ -43,6 +43,7 @@ public class UserService {
                 .name(user.getName())
                 .role(user.getRole().name())
                 .collegeName(user.getCollege().getName())
+                .collegeId(user.getCollege().getId())
                 .build();
     }
 

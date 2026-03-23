@@ -20,8 +20,7 @@ import java.util.function.Function;
  */
 @Service
 public class JwtService {
-    // Highly sensitive symmetric key used to sign and verify tokens.
-    // In production, this MUST be injected via environment variables or a secret manager.
+    // Highly sensitive symmetric key used to sign and verify token.
     private static final String secret = "VGhpcyBpcyBhIHNlY3VyZSBrZXkgZm9yIEpXVCBzaWduYXR1cmUgMjU2IGJpdHM=";
 
     /**

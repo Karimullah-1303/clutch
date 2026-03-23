@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -26,23 +28,23 @@ public class AdminService {
     private final CollegeRepository collegeRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // Hardcoded authoritative ID for Andhra University.
-    private final UUID ANDHRA_UNIV_ID = UUID.fromString("bb12e7cf-b357-407d-a417-c43d014758e7");
-
     /**
      * Parses a CSV file to bulk-create user accounts (Students, Teachers, Admins).
-     * Applies a default password hash and associates them with the university tenant.
+     * Applies a default password hash and associates them with the dynamic university tenant.
      */
     @Transactional
-    public void processUsersCsv(MultipartFile file) {
-        College college = collegeRepository.findById(ANDHRA_UNIV_ID).orElseThrow();
+    public void processUsersCsv(MultipartFile file, UUID collegeId) {
+        // 🚨 FIX: Use the dynamic ID passed from the controller
+        College college = collegeRepository.findById(collegeId)
+                .orElseThrow(() -> new RuntimeException("College not found for the current Admin."));
 
-        // Hash the default password once to save CPU cycles during the loop
         String defaultPassword = passwordEncoder.encode("AUWelcome123!");
+        List<AppUser> usersToSave = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String line;
             br.readLine(); // Skip header row: RollNumber,Name,Email,Role
+
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 if (data.length < 4) continue;
@@ -54,11 +56,14 @@ public class AdminService {
                 user.setRole(Role.valueOf(data[3].trim().toUpperCase()));
                 user.setPassword(defaultPassword);
                 user.setCollege(college);
+                user.setActive(true);
 
-                // Saves the pure identity record.
-                // Academic enrollments are handled separately by the Academy Service.
-                userRepository.save(user);
+                usersToSave.add(user);
             }
+
+            // 🚀 UPGRADE: Batch save all users at once instead of hitting the DB in a loop
+            userRepository.saveAll(usersToSave);
+
         } catch (Exception e) {
             throw new RuntimeException("Failed to process users CSV: " + e.getMessage());
         }

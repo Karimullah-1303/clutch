@@ -2,6 +2,7 @@ package com.campus.identity.controller;
 
 import com.campus.identity.dto.UserProfileDto;
 import com.campus.identity.dto.UserUpdateDto;
+import com.campus.identity.repo.UserRepository;
 import com.campus.identity.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     // Any user with a valid JWT can view their own profile
     @GetMapping("/me")
@@ -44,8 +46,9 @@ public class UserController {
      */
     @PostMapping("/batch")
     public ResponseEntity<List<UserProfileDto>> getUsersByIds(@RequestBody List<UUID> userIds) {
-        List<UserProfileDto> profiles = userIds.stream()
-                .map(id -> userService.getUserById(id))
+
+        // 🚀 BATCH FETCH: Hits the database exactly ONE time, no matter how many IDs there are!
+        List<UserProfileDto> profiles = userRepository.findAllById(userIds).stream()
                 .map(user -> UserProfileDto.builder()
                         .id(user.getId())
                         .rollNumber(user.getRollNumber())
@@ -53,6 +56,7 @@ public class UserController {
                         .name(user.getName())
                         .role(user.getRole().name())
                         .collegeName(user.getCollege().getName())
+                        .collegeId(user.getCollege().getId())
                         .build())
                 .toList();
 

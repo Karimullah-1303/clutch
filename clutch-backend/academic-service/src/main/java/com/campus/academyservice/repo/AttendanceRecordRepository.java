@@ -34,4 +34,22 @@ public interface AttendanceRecordRepository extends JpaRepository<AttendanceReco
 
     // Fetches a massive batch of AttendanceRecords using a list of session IDs
     List<AttendanceRecord> findByClassSessionIdIn(List<UUID> classSessionIds);
+
+
+    @Query("SELECT new map(cs.sessionDate as date, tb.dayOfWeek as day, ar.status as status) " +
+            "FROM AttendanceRecord ar " +
+            "JOIN ar.classSession cs " +
+            "JOIN cs.timetableBlock tb " +
+            "WHERE ar.studentId = :studentId AND tb.subject.id = :subjectId " +
+            "ORDER BY cs.sessionDate DESC")
+    List<java.util.Map<String, Object>> findStudentSubjectDetails(
+            @Param("studentId") UUID studentId,
+            @Param("subjectId") UUID subjectId);
+
+
+    // Fetch detailed student records for a specific class session
+    @Query("SELECT new map(ar.studentId as studentId, ar.status as status) " +
+            "FROM AttendanceRecord ar WHERE ar.classSession.id = :sessionId")
+    List<java.util.Map<String, Object>> findStudentRecordsBySessionId(
+            @Param("sessionId") UUID sessionId);
 }

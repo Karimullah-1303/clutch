@@ -5,7 +5,7 @@ spring:
   application:
     name: academic-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/academic_db
+    url: jdbc:postgresql://postgres-db:5432/academic_db
     username: clutchadmin
     password: secret
     driver-class-name: org.postgresql.Driver

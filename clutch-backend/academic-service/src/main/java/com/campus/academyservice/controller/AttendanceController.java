@@ -4,6 +4,9 @@ import com.campus.academyservice.dto.AttendanceRecordDto;
 import com.campus.academyservice.dto.BatchAttendanceRequestDto;
 import com.campus.academyservice.dto.StudentSubjectStatDto;
 import com.campus.academyservice.dto.TeacherAnalyticsDto;
+import com.campus.academyservice.entity.ClassSession;
+import com.campus.academyservice.repo.AttendanceRecordRepository;
+import com.campus.academyservice.repo.ClassSessionRepository;
 import com.campus.academyservice.service.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,6 +30,8 @@ import java.util.UUID;
 public class AttendanceController {
 
     private final AttendanceService attendanceService;
+    private final AttendanceRecordRepository  attendanceRecordRepository;
+    private final ClassSessionRepository   classSessionRepository;
 
     /**
      * --- TEACHER ACTION: Mark Attendance ---
@@ -73,7 +78,36 @@ public class AttendanceController {
      * Fetches the massive data aggregate for the Teacher Analytics dashboard.
      */
     @GetMapping("/teacher/{teacherId}/analytics")
-    public ResponseEntity<TeacherAnalyticsDto> getTeacherAnalytics(@PathVariable UUID teacherId) {
-        return ResponseEntity.ok(attendanceService.getTeacherAnalytics(teacherId));
+    public ResponseEntity<TeacherAnalyticsDto> getTeacherAnalytics(
+            @RequestHeader("Authorization") String authHeader, // <-- GRAB THE TOKEN
+            @PathVariable UUID teacherId) {
+
+        // Pass the token down to the service layer
+        return ResponseEntity.ok(attendanceService.getTeacherAnalytics(authHeader, teacherId));
+    }
+
+    @GetMapping("/student/{studentId}/subject/{subjectId}/details")
+    public ResponseEntity<List<java.util.Map<String, Object>>> getSubjectDetails(
+            @PathVariable UUID studentId,
+            @PathVariable UUID subjectId) {
+        return ResponseEntity.ok(attendanceRecordRepository.findStudentSubjectDetails(studentId, subjectId));
+    }
+
+
+    // 1. Endpoint to get the dates when the card is clicked
+    @GetMapping("/teacher/{teacherId}/subject/{subjectId}/section/{sectionId}/sessions")
+    public ResponseEntity<List<ClassSession>> getTeacherPastSessions(
+            @PathVariable UUID teacherId,
+            @PathVariable UUID subjectId,
+            @PathVariable UUID sectionId) {
+        return ResponseEntity.ok(classSessionRepository.findTeacherPastSessions(teacherId, subjectId, sectionId));
+    }
+
+    // 2. Endpoint to get the student list when a specific date is clicked
+    @GetMapping("/session/{sessionId}/records")
+    public ResponseEntity<List<java.util.Map<String, Object>>> getSessionAttendanceDetails(
+            @RequestHeader("Authorization") String authHeader, // 🚨 Added to pass to Identity
+            @PathVariable UUID sessionId) {
+        return ResponseEntity.ok(attendanceService.getSessionAttendanceDetailsWithNames(authHeader, sessionId));
     }
 }

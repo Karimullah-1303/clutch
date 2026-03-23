@@ -12,6 +12,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AtRiskStudentDto {
     private UUID studentId;
+    private UUID subjectId;
+    private UUID sectionId;
     private String studentName;
     private String rollNumber;
     private String subjectName;

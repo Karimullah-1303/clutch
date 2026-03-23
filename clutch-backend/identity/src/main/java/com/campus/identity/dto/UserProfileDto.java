@@ -13,4 +13,5 @@ public class UserProfileDto {
     private String name;
     private String role;
     private String collegeName;
+    private UUID collegeId;
 }

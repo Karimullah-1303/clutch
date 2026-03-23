@@ -45,7 +45,7 @@ export default function ChangePasswordModal({ isOpen, onClose }) {
     try {
       // --- API Execution ---
       // Cross-origin request to the Identity Service (Port 8081)
-      await axios.put('http://localhost:8081/api/v1/auth/change-password', {
+      await axios.put('/api/v1/auth/change-password', {
         oldPassword: oldPassword,
         newPassword: newPassword
       }, {

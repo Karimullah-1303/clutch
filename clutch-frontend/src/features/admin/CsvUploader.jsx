@@ -6,10 +6,10 @@ import PrimaryButton from "../../shared/components/PrimaryButton";
 /**
  * CsvUploader Component
  * A highly reusable, dynamic file upload card.
- * Acts as an API gateway by accepting a target `port` and `endpoint` via props, 
- * allowing the Admin Dashboard to route different CSV payloads to different microservices.
+ * Accepts a target `endpoint` via props and relies on the Kubernetes Ingress
+ * to route the payload to the correct backend microservice automatically.
  */
-export default function CsvUploader({ title, endpoint, port, description }) {
+export default function CsvUploader({ title, endpoint, description }) {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('idle'); // State machine: idle, loading, success, error
   const [message, setMessage] = useState('');
@@ -37,12 +37,14 @@ export default function CsvUploader({ title, endpoint, port, description }) {
 
     try {
       const token = localStorage.getItem('clutch_token');
-      await axios.post(`http://localhost:${port}${endpoint}`, formData, {
+      
+      // Uses relative path! The browser/Ingress handles the IP automatically.
+      await axios.post(endpoint, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
         }
       });
+      
       setStatus('success');
       setMessage(`${file.name} uploaded successfully!`);
       setFile(null); // Clear file to prevent duplicate submissions

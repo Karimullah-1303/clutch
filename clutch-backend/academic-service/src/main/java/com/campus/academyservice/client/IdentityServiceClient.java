@@ -15,7 +15,7 @@ import java.util.UUID;
  * Acts as a proxy to execute synchronous HTTP calls to the Identity Service (Port 8081).
  * Abstracts away the complexity of RestTemplate and handles data hydration across microservice boundaries.
  */
-@FeignClient(name =  "identity-service", url = "http://localhost:8081")
+@FeignClient(name =  "identity-service", url = "http://identity-service:8081")
 public interface IdentityServiceClient {
 
     /**
@@ -29,6 +29,7 @@ public interface IdentityServiceClient {
      * Batch retrieves full user profiles (names, roll numbers) based on a list of UUIDs.
      * Used to hydrate the At-Risk student list and the class roster UI.
      */
+
     @PostMapping("/api/v1/users/batch")
-    List<UserProfileDto> getUsersByIds(@RequestBody List<UUID> userIds);
+    List<UserProfileDto> getUsersByIds(@RequestHeader("Authorization") String token, @RequestBody List<UUID> userIds);
 }

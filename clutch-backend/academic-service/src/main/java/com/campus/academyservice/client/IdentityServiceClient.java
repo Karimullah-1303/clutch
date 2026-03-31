@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -15,7 +17,7 @@ import java.util.UUID;
  * Acts as a proxy to execute synchronous HTTP calls to the Identity Service (Port 8081).
  * Abstracts away the complexity of RestTemplate and handles data hydration across microservice boundaries.
  */
-@FeignClient(name =  "identity-service", url = "http://identity-service:8081")
+@FeignClient(name =  "identity-service", url = "http://localhost:8081")
 public interface IdentityServiceClient {
 
     /**
@@ -32,4 +34,7 @@ public interface IdentityServiceClient {
 
     @PostMapping("/api/v1/users/batch")
     List<UserProfileDto> getUsersByIds(@RequestHeader("Authorization") String token, @RequestBody List<UUID> userIds);
+
+    @PostMapping("/api/v1/users/batch-names")
+    Map<UUID, String> getTeacherNames(@RequestHeader("Authorization") String token, @RequestBody Set<UUID> teacherIds);
 }

@@ -7,8 +7,11 @@ import com.campus.academyservice.entity.TimetableBlock;
 import com.campus.academyservice.entity.enums.AttendanceStatus;
 import com.campus.academyservice.repo.AttendanceRecordRepository;
 import com.campus.academyservice.repo.ClassSessionRepository;
+import com.campus.academyservice.repo.LessonPlanTopicRepository;
 import com.campus.academyservice.repo.TimetableBlockRepository;
+import com.campus.academyservice.service.LessonPlanService;
 import com.campus.academyservice.service.StudentAcademicService;
+import com.campus.academyservice.service.SyllabusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,9 @@ public class TimetableBlockController {
     private final ClassSessionRepository sessionRepository;
     private final AttendanceRecordRepository attendanceRepository;
     private final StudentAcademicService studentAcademicService;
+    private final SyllabusService syllabusService;
+    private final LessonPlanTopicRepository  lessonPlanTopicRepository;
+
     @PostMapping
     public ResponseEntity<TimetableBlock> createBlock(@RequestBody TimetableBlock block) {
         return ResponseEntity.ok(blockRepository.save(block));
@@ -83,16 +89,39 @@ public class TimetableBlockController {
                         .count();
             }
 
+            // 🚨 NEW: THE SYLLABUS PROGRESS CALCULATOR 🚨
+            String subjectCode = block.getSubject().getCourseCode();
+            String sectionName = block.getSection().getName();
+            int progressPercentage = 0;
+
+            try {
+                // 1. Get total topics in the syllabus
+                int totalTopics = syllabusService.getTotalTopicCount(subjectCode);
+
+                // 2. Get historically completed topics for this specific section
+                List<UUID> completedIds = lessonPlanTopicRepository.findHistoricallyCompletedTopicIds(subjectCode, sectionName);
+
+                // 3. Calculate safe percentage
+                if (totalTopics > 0) {
+                    progressPercentage = (int) Math.round(((double) completedIds.size() / totalTopics) * 100);
+                }
+            } catch (Exception e) {
+                // Failsafe in case an Admin hasn't uploaded the syllabus for this course yet
+                progressPercentage = 0;
+            }
+
             return DailyScheduleDto.builder()
                     .blockId(block.getId())
                     .subjectName(block.getSubject().getName())
-                    .sectionName(block.getSection().getName())
+                    .sectionName(sectionName)
                     .startTime(block.getStartTime())
                     .endTime(block.getEndTime())
                     .isCompleted(isDone) // Controls the UI rendering of the green "Submitted (Edit)" badge
                     .sectionId(block.getSection().getId())
                     .presentCount(present)
                     .totalEnrolled(total)
+                    .subjectCode(subjectCode)
+                    .syllabusProgress(progressPercentage) // 🚨 ATTACHED TO UI DTO
                     .build();
         }).collect(Collectors.toList());
 

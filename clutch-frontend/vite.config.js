@@ -39,6 +39,18 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      // 🚨 ADDED SYLLABUS PROXY 🚨
+      '/api/v1/academic/syllabus': {
+        target: 'http://localhost:8082',
+        changeOrigin: true,
+        secure: false,
+      },
+      // 🚨 ADDED LESSON PLANS PROXY 🚨
+      '/api/v1/academic/lesson-plans': {
+        target: 'http://localhost:8082',
+        changeOrigin: true,
+        secure: false,
+      },
       '/api/v1/attendance': {
         target: 'http://localhost:8082',
         changeOrigin: true,

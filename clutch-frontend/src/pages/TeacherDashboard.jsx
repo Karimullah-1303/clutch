@@ -7,42 +7,36 @@ import ScheduleCard from '../features/attendance/ScheduleCard';
 import DateSelector from '../features/attendance/DateSelector';
 import ChangePasswordModal from '../features/auth/ChangePassword';
 import TeacherAnalytics from '../features/attendance/TeacherAnalytics';
+import LessonPlanModal from '../features/attendance/LessonPlanModal';
+import TeacherPacingBanner from '../features/academic/TeacherPacingBanner';
 
-// --- NEW: THE TIME ENGINE ---
-// Helper to strip the time so we only compare the actual calendar days
+// --- THE TIME ENGINE ---
 const getMidnight = (date) => new Date(new Date(date).setHours(0, 0, 0, 0));
 
 const getAttendanceButtonState = (selectedDate, isSubmitted) => {
   const today = getMidnight(new Date());
   const targetDate = getMidnight(new Date(selectedDate));
   
-  // Calculate difference in days safely
   const diffTime = today.getTime() - targetDate.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-  // 1. THE FUTURE
   if (targetDate > today) {
     return { state: "future", text: "Upcoming", disabled: true, colorClass: "bg-slate-200 text-slate-500 cursor-not-allowed border border-slate-300" };
   } 
   
-  // 2. ALREADY SUBMITTED (Past or Present)
   if (isSubmitted) {
     return { state: "submitted", text: "Submitted (Edit)", disabled: false, colorClass: "bg-green-100 text-green-700 hover:bg-green-200 border border-green-200" };
   }
 
-  // 3. THE PAST (Unsubmitted)
   if (targetDate < today) {
     if (diffDays <= 2) {
-      // Grace Period (48 Hours)
       return { state: "late", text: "Submit Late", disabled: false, colorClass: "bg-amber-100 text-amber-700 hover:bg-amber-200 border border-amber-200" };
     } else {
-      // Locked completely
       return { state: "locked", text: "Locked (Missed)", disabled: true, colorClass: "bg-red-50 text-red-500 cursor-not-allowed border border-red-200" };
     }
   }
 
-  // 4. EXACTLY TODAY (Unsubmitted)
-  return { state: "today", text: "Take Attendance", disabled: false, colorClass: "bg-clutch-600 text-white hover:bg-clutch-700" };
+  return { state: "today", text: "Take Attendance", disabled: false, colorClass: "bg-blue-600 text-white border border-blue-700 hover:bg-blue-700 hover:border-blue-800 shadow-sm rounded-mv" };
 };
 
 export default function TeacherDashboard() {
@@ -58,6 +52,15 @@ export default function TeacherDashboard() {
   const [stats, setStats] = useState({ pending: 0, scheduled: 0, avgHealth: "--" });
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('schedule');
+
+  // MODAL STATES
+  const [isLessonPlanOpen, setIsLessonPlanOpen] = useState(false);
+  const [activeLessonData, setActiveLessonData] = useState(null);
+
+  const handleOpenLessonPlan = (blockId, subjectCode, subjectName, sectionName) => {
+    setActiveLessonData({ blockId, subjectCode, subjectName, sectionName });
+    setIsLessonPlanOpen(true);
+  };
   
   useEffect(() => {
     const fetchSchedule = async () => {
@@ -172,8 +175,6 @@ export default function TeacherDashboard() {
             ) : todayClasses.length > 0 ? (
               <div className="flex flex-col gap-4">
                 {todayClasses.map((cls) => {
-                  
-                  // 🚨 NEW: Calculate the state before rendering the card
                   const btnConfig = getAttendanceButtonState(currentDate, cls.completed);
 
                   return (
@@ -181,12 +182,15 @@ export default function TeacherDashboard() {
                       key={cls.blockId} 
                       blockId={cls.blockId} 
                       subject={cls.subjectName} 
+                      subjectCode={cls.subjectCode || cls.subjectId}
                       section={cls.sectionName} 
                       time={cls.startTime.substring(0, 5)} 
                       isCompleted={cls.completed} 
                       sectionId={cls.sectionId}
                       currentDate={currentDate.toISOString()} 
-                      buttonConfig={btnConfig} // 🚨 NEW: Pass it down!
+                      buttonConfig={btnConfig}
+                      syllabusProgress={cls.syllabusProgress}
+                      onOpenLessonPlan={handleOpenLessonPlan} 
                     />
                   );
                 })}
@@ -204,6 +208,14 @@ export default function TeacherDashboard() {
         isOpen={isPasswordModalOpen} 
         onClose={() => setIsPasswordModalOpen(false)} 
       />
+
+      <LessonPlanModal 
+        isOpen={isLessonPlanOpen} 
+        onClose={() => setIsLessonPlanOpen(false)} 
+        classData={activeLessonData}
+        currentDate={currentDate}
+      />
+
     </div>
   );
 }

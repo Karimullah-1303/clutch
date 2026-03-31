@@ -15,7 +15,8 @@ public class DailyScheduleDto {
     private LocalTime endTime;
     private boolean isCompleted;
     private UUID sectionId;
-
+    private String subjectCode;
     private int presentCount;
     private int totalEnrolled;
+    private Integer syllabusProgress;
 }

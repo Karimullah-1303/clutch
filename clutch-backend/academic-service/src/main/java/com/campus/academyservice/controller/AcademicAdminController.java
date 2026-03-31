@@ -1,6 +1,7 @@
 package com.campus.academyservice.controller;
 
 import com.campus.academyservice.client.IdentityServiceClient;
+import com.campus.academyservice.dto.DepartmentProgressDto;
 import com.campus.academyservice.dto.UserProfileDto;
 import com.campus.academyservice.service.AcademicAdminService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -62,5 +64,13 @@ public class AcademicAdminController {
         academicAdminService.processEnrollmentsCsv(file, adminProfile.getCollegeId());
 
         return ResponseEntity.ok("Students enrollments uploaded successfully");
+    }
+
+    @GetMapping("/department-progress")
+    public ResponseEntity<List<DepartmentProgressDto>> getDepartmentProgress(
+            @RequestParam(defaultValue = "CSE") String departmentId) {
+
+        List<DepartmentProgressDto> dashboardData = academicAdminService.getDepartmentHealthDashboard(departmentId);
+        return ResponseEntity.ok(dashboardData);
     }
 }

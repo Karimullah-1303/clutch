@@ -6,10 +6,12 @@ spring:
     name: identity
 
   datasource:
-    url: jdbc:postgresql://postgres-db:5432/identity_db
-    username: clutchadmin
-    password: secret
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 3
 
   jpa:
     hibernate:
@@ -17,11 +19,13 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: identity_schema
 
   flyway:
     enabled: true
     baseline-on-migrate: true
     check-location: false
+    schemas: identity_schema
 debug: true
 logging:
   level:

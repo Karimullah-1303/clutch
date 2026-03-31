@@ -321,7 +321,7 @@ public class AttendanceService {
         return TeacherAnalyticsDto.builder()
                 .globalAveragePercentage(globalAvg)
                 .totalClassesTaughtThisSemester(totalClassesTaught)
-                .sectionHealthList(sectionHealthList)
+                 .sectionHealthList(sectionHealthList)
                 .atRiskStudents(atRiskList)
                 .build();
     }

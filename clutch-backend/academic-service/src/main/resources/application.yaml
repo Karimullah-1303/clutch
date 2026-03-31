@@ -5,19 +5,32 @@ spring:
   application:
     name: academic-service
   datasource:
-    url: jdbc:postgresql://postgres-db:5432/academic_db
-    username: clutchadmin
-    password: secret
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 3
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: academic_schema
   flyway:
     enabled: true
     baseline-on-migrate: true
+    check-location: false
+    schemas: academic_schema
 
 debug: true
+
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+
+academic:
+  semester:
+    start-date: "2026-01-20"

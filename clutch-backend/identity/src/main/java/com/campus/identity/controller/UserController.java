@@ -2,6 +2,7 @@ package com.campus.identity.controller;
 
 import com.campus.identity.dto.UserProfileDto;
 import com.campus.identity.dto.UserUpdateDto;
+import com.campus.identity.entity.AppUser;
 import com.campus.identity.repo.UserRepository;
 import com.campus.identity.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * UserController
@@ -61,5 +65,18 @@ public class UserController {
                 .toList();
 
         return ResponseEntity.ok(profiles);
+    }
+
+
+    @PostMapping("/batch-names")
+    public ResponseEntity<Map<UUID, String>> getTeacherNames(@RequestBody Set<UUID> userIds) {
+        // Fetch the users from your Identity database
+        List<AppUser> users = userRepository.findAllById(userIds);
+
+        // Convert the List of Users into a Map of {UUID: "Name"}
+        Map<UUID, String> nameMap = users.stream()
+                .collect(Collectors.toMap(AppUser::getId, AppUser::getName));
+
+        return ResponseEntity.ok(nameMap);
     }
 }

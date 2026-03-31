@@ -31,4 +31,13 @@ public interface ClassSessionRepository extends JpaRepository<ClassSession, UUID
             @Param("teacherId") UUID teacherId,
             @Param("subjectId") UUID subjectId,
             @Param("sectionId") UUID sectionId);
+
+
+
+    // 🚨 Calculate how many classes have actually happened 🚨
+    @Query("SELECT COUNT(cs) FROM ClassSession cs " +
+            "JOIN cs.timetableBlock tb " +
+            "WHERE tb.subject.courseCode = :subjectCode " +
+            "AND tb.section.name = :sectionName")
+    int countCompletedSessions(@Param("subjectCode") String subjectCode, @Param("sectionName") String sectionName);
 }

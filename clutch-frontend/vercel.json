@@ -1,0 +1,44 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/v1/auth/:match*",
+      "destination": "https://clutch-identity-1078092492578.asia-south1.run.app/api/v1/auth/:match*"
+    },
+    {
+      "source": "/api/v1/users/:match*",
+      "destination": "https://clutch-identity-1078092492578.asia-south1.run.app/api/v1/users/:match*"
+    },
+    {
+      "source": "/api/v1/admin/:match*",
+      "destination": "https://clutch-identity-1078092492578.asia-south1.run.app/api/v1/admin/:match*"
+    },
+    {
+      "source": "/api/v1/colleges/:match*",
+      "destination": "https://clutch-identity-1078092492578.asia-south1.run.app/api/v1/colleges/:match*"
+    },
+    {
+      "source": "/api/v1/academic/:match*",
+      "destination": "https://clutch-academic-1078092492578.asia-south1.run.app/api/v1/academic/:match*"
+    },
+    {
+      "source": "/api/v1/attendance/:match*",
+      "destination": "https://clutch-academic-1078092492578.asia-south1.run.app/api/v1/attendance/:match*"
+    },
+    {
+      "source": "/api/v1/sections/:match*",
+      "destination": "https://clutch-academic-1078092492578.asia-south1.run.app/api/v1/sections/:match*"
+    },
+    {
+      "source": "/api/v1/subjects/:match*",
+      "destination": "https://clutch-academic-1078092492578.asia-south1.run.app/api/v1/subjects/:match*"
+    },
+    {
+      "source": "/api/v1/blocks/:match*",
+      "destination": "https://clutch-academic-1078092492578.asia-south1.run.app/api/v1/blocks/:match*"
+    },
+    {
+      "source": "/api/v1/placement/:match*",
+      "destination": "https://clutch-placement-1078092492578.asia-south1.run.app/api/v1/placement/:match*"
+    }
+  ]
+}

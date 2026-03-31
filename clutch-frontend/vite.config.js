@@ -11,22 +11,22 @@ export default defineConfig({
       // IDENTITY SERVICE (IntelliJ Port 8081)
       // ==========================================
       '/api/v1/admin': {
-        target: 'http://localhost:8081',
+        target: 'https://clutch-identity-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
       '/api/v1/auth': {
-        target: 'http://localhost:8081',
+        target: 'https://clutch-identity-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
       '/api/v1/colleges': {
-        target: 'http://localhost:8081',
+        target: 'https://clutch-identity-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
       '/api/v1/users': {
-        target: 'http://localhost:8081',
+        target: 'https://clutch-identity-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
@@ -35,39 +35,39 @@ export default defineConfig({
       // ACADEMIC SERVICE (IntelliJ Port 8082)
       // ==========================================
       '/api/v1/academic/admin': {
-        target: 'http://localhost:8082',
+        target: 'https://clutch-academic-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
       // 🚨 ADDED SYLLABUS PROXY 🚨
       '/api/v1/academic/syllabus': {
-        target: 'http://localhost:8082',
+        target: 'https://clutch-academic-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
       // 🚨 ADDED LESSON PLANS PROXY 🚨
       '/api/v1/academic/lesson-plans': {
-        target: 'http://localhost:8082',
+        target: 'https://clutch-academic-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
       '/api/v1/attendance': {
-        target: 'http://localhost:8082',
+        target: 'https://clutch-academic-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
       '/api/v1/sections': {
-        target: 'http://localhost:8082',
+        target: 'https://clutch-academic-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
       '/api/v1/subjects': {
-        target: 'http://localhost:8082',
+        target: 'https://clutch-academic-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
       '/api/v1/blocks': {
-        target: 'http://localhost:8082',
+        target: 'https://clutch-academic-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
@@ -76,7 +76,7 @@ export default defineConfig({
       // PLACEMENT SERVICE (IntelliJ Port 8083)
       // ==========================================
       '/api/v1/placement': {
-        target: 'http://localhost:8083',
+        target: 'https://clutch-placement-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       }

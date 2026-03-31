@@ -17,7 +17,7 @@ import java.util.UUID;
  * Acts as a proxy to execute synchronous HTTP calls to the Identity Service (Port 8081).
  * Abstracts away the complexity of RestTemplate and handles data hydration across microservice boundaries.
  */
-@FeignClient(name =  "identity-service", url = "http://localhost:8081")
+@FeignClient(name =  "identity-service", url = "${IDENTITY_SERVICE_URL}")
 public interface IdentityServiceClient {
 
     /**

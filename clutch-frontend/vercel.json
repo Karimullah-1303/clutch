@@ -21,6 +21,10 @@
       "destination": "https://clutch-academic-1078092492578.asia-south1.run.app/api/v1/academic/:match*"
     },
     {
+      "source": "/api/v1/attendance",
+      "destination": "https://clutch-academic-1078092492578.asia-south1.run.app/api/v1/attendance"
+    },
+    {
       "source": "/api/v1/attendance/:match*",
       "destination": "https://clutch-academic-1078092492578.asia-south1.run.app/api/v1/attendance/:match*"
     },

@@ -8,12 +8,12 @@ import java.util.UUID;
 @Builder
 public class DepartmentProgressDto {
     private UUID teacherId;
-    private String teacherName;      // e.g., "Dr. Sharma"
-    private String subjectCode;      // e.g., "CS3201"
-    private String subjectName;      // e.g., "OOSE"
-    private String sectionName;      // e.g., "CSE-2"
+    private String teacherName;
+    private String subjectCode;
+    private String subjectName;
+    private String sectionName;
 
-    private int syllabusPercentage;  // e.g., 42
-    private String pacingStatus;     // "LAGGING", "ON_TRACK", "ADVANCED", or "UNMAPPED"
-    private int currentLectureCount; // How many classes they've actually held
+    private int syllabusPercentage;
+    private String pacingStatus;
+    private int currentLectureCount;
 }

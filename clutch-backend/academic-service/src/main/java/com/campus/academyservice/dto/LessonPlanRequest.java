@@ -17,10 +17,10 @@ public class LessonPlanRequest {
     private String homework;
     private String status;
 
-    // Used when CREATING a new plan (Topics they intend to teach)
+
     private List<UUID> topicIds;
 
-    // NEW: Used when UPDATING a plan (Topics they actually finished)
+
     private List<UUID> completedTopicIds;
     private List<UUID> pushedTopicIds;
 }

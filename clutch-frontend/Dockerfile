@@ -22,7 +22,7 @@ FROM nginx:alpine
 # Remove the default NGINX config
 RUN rm /etc/nginx/conf.d/default.conf
 
-# 🚨 Inject our custom Reverse Proxy routing config
+# Inject our custom Reverse Proxy routing config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy the compiled static files from Stage 1 into NGINX

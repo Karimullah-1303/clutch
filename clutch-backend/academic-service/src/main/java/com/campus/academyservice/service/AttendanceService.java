@@ -43,8 +43,6 @@ public class AttendanceService {
     @Transactional
     public void markBatchAttendance(String authHeader, BatchAttendanceRequestDto batchRequest) {
 
-        // 0. Extract the actual date the teacher selected on the UI
-        // 🚨 IMPORTANT: Make sure your BatchAttendanceRequestDto has a 'date' field of type LocalDate!
         LocalDate targetDate = batchRequest.getDate();
         LocalDate today = LocalDate.now();
 
@@ -118,9 +116,6 @@ public class AttendanceService {
             double currentPercentage = totalHeld == 0 ? 100.0 : ((double) totalAttended / totalHeld) * 100;
             currentPercentage = Math.round(currentPercentage * 100.0) / 100.0;
 
-            // ==========================================
-            // 🚨 REAL-WORLD DYNAMIC MARGIN ALGORITHM 🚨
-            // ==========================================
 
             int classesYouCanMiss = 0;
             int classesNeededToRecover = 0;
@@ -226,7 +221,7 @@ public class AttendanceService {
         // --- SECTION HEALTH MATH ---
         List<SectionHealthDto> sectionHealthList = new ArrayList<>();
 
-        // 🚨 FIX: Group by Subject ID + Section ID to merge different time blocks of the same class
+        // Group by Subject ID + Section ID to merge different time blocks of the same class
         Map<String, List<ClassSession>> sessionsBySubjectAndSection = sessions.stream()
                 .collect(Collectors.groupingBy(session ->
                         session.getTimetableBlock().getSubject().getId().toString() + "_" +
@@ -257,7 +252,7 @@ public class AttendanceService {
         // --- AT-RISK STUDENTS (The Hitlist) ---
         List<AtRiskStudentDto> atRiskList = new ArrayList<>();
 
-        // 🚨 FIX: Multi-level grouping: Group by Student ID first, then by Subject_Section string key
+        //  Multi-level grouping: Group by Student ID first, then by Subject_Section string key
         Map<UUID, Map<String, List<AttendanceRecord>>> recordsByStudentAndSubject = allRecords.stream()
                 .collect(Collectors.groupingBy(
                         AttendanceRecord::getStudentId,

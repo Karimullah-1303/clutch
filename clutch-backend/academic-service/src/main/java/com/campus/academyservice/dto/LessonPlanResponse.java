@@ -16,6 +16,6 @@ public class LessonPlanResponse {
     private String notes;
     private String homework;
     private String status;
-    private List<UUID> completedTopicIds; // 🚨 THIS is what React needs!
+    private List<UUID> completedTopicIds;
     private List<UUID> pushedTopicIds;
 }

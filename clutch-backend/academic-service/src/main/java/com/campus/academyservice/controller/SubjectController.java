@@ -20,12 +20,12 @@ public class SubjectController {
 
     private final SubjectRepository subjectRepository;
 
-    @PostMapping
+    @PostMapping(value = {"" , "/"})
     public ResponseEntity<Subject> createSubject(@RequestBody Subject subject) {
         return ResponseEntity.ok(subjectRepository.save(subject));
     }
 
-    @GetMapping
+    @GetMapping(value = {"" , "/"})
     public ResponseEntity<List<Subject>> getAllSubjects() {
         return ResponseEntity.ok(subjectRepository.findAll());
     }

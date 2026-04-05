@@ -40,7 +40,7 @@ public class TimetableBlockController {
     private final SyllabusService syllabusService;
     private final LessonPlanTopicRepository  lessonPlanTopicRepository;
 
-    @PostMapping
+    @PostMapping(value = {"" , "/"})
     public ResponseEntity<TimetableBlock> createBlock(@RequestBody TimetableBlock block) {
         return ResponseEntity.ok(blockRepository.save(block));
     }
@@ -69,7 +69,7 @@ public class TimetableBlockController {
         // 3. Assemble the dynamic UI DTO payload
         List<DailyScheduleDto> schedule = blocksToday.stream().map(block -> {
 
-            // MAGIC CHECK: Does a real historical session exist for this blueprint on this exact date?
+
             boolean isDone = sessionRepository.existsByTimetableBlockIdAndSessionDate(block.getId(), date);
 
             int present = 0;
@@ -89,7 +89,7 @@ public class TimetableBlockController {
                         .count();
             }
 
-            // 🚨 NEW: THE SYLLABUS PROGRESS CALCULATOR 🚨
+            //  NEW: THE SYLLABUS PROGRESS CALCULATOR
             String subjectCode = block.getSubject().getCourseCode();
             String sectionName = block.getSection().getName();
             int progressPercentage = 0;
@@ -121,7 +121,7 @@ public class TimetableBlockController {
                     .presentCount(present)
                     .totalEnrolled(total)
                     .subjectCode(subjectCode)
-                    .syllabusProgress(progressPercentage) // 🚨 ATTACHED TO UI DTO
+                    .syllabusProgress(progressPercentage) // ATTACHED TO UI DTO
                     .build();
         }).collect(Collectors.toList());
 

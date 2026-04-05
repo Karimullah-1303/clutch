@@ -50,7 +50,7 @@ public class PlacementAdminController {
         return ResponseEntity.ok(jobApplicationRepository.findByJobPosting_Id(jobId));
     }
 
-    // 5. 🚨 FIX: Added the missing @PutMapping annotation! 🚨
+
     @PutMapping("/applications/{appId}/status")
     public ResponseEntity<String> updateStatus(@PathVariable UUID appId, @RequestParam String status) {
         // Calls the Service to update the DB AND fire the notification

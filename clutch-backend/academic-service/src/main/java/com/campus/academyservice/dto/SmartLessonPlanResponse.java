@@ -8,10 +8,9 @@ import java.util.UUID;
 @Data
 @Builder
 public class SmartLessonPlanResponse {
-    private List<UUID> historicallyCompletedTopicIds; // Feeds the UI Progress Wheels
-    private List<TopicDto> todaysTargets;             // Feeds the "Green Zone" checklist
+    private List<UUID> historicallyCompletedTopicIds;
+    private List<TopicDto> todaysTargets;
     private List<TopicDto> carryoverTopics;
-    private int totalSyllabusTopics;                  // Helps calculate the global percentage
-    private int completedSyllabusTopics;              // Helps calculate the global percentage
-
+    private int totalSyllabusTopics;
+    private int completedSyllabusTopics;
 }

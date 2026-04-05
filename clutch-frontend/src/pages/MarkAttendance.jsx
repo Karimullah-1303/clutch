@@ -97,12 +97,12 @@ export default function MarkAttendance() {
     const token = localStorage.getItem('clutch_token');
 
     try {
-      // 🚨 CRITICAL FIX: Ensure the date is formatted strictly as YYYY-MM-DD for Spring Boot
+      
       const formattedDate = new Date(savedDate).toISOString().split('T')[0];
 
       const batchPayload = {
         blockId: blockId,
-        date: formattedDate, // 🚨 NEW: Passing the exact target date to the backend!
+        date: formattedDate, 
         records: students.map(student => ({
           studentId: student.id,
           status: attendance[student.id] ? "PRESENT" : "ABSENT"

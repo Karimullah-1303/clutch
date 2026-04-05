@@ -61,7 +61,7 @@ public class AdminService {
                 usersToSave.add(user);
             }
 
-            // 🚀 UPGRADE: Batch save all users at once instead of hitting the DB in a loop
+            // Batch save all users at once instead of hitting the DB in a loop
             userRepository.saveAll(usersToSave);
 
         } catch (Exception e) {

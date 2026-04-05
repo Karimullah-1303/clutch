@@ -155,7 +155,7 @@ export default function LessonPlanModal({ isOpen, onClose, classData, currentDat
     }
   };
 
-  // 🚨 NEW: PACING BADGE RENDERER 🚨
+
   const renderPacingBadge = (status) => {
     if (!status || status === 'UNMAPPED') return null;
     if (status === 'LAGGING') return <span className="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-700 border border-red-200">🔴 Behind</span>;
@@ -317,7 +317,7 @@ export default function LessonPlanModal({ isOpen, onClose, classData, currentDat
                                 <span className={`text-base font-medium transition-colors pt-0.5 ${isChecked ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
                                   <span className="font-bold mr-2 text-slate-900">{topic.topicNumber}</span> 
                                   {topic.title}
-                                  {/* 🚨 INJECT PACING BADGE HERE TOO 🚨 */}
+                                  
                                   {!isChecked && renderPacingBadge(topic.pacingStatus)}
                                 </span>
                               </label>

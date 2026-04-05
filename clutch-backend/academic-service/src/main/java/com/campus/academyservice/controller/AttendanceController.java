@@ -37,7 +37,7 @@ public class AttendanceController {
      * --- TEACHER ACTION: Mark Attendance ---
      * Accepts a bulk payload of student attendance statuses for a specific class session.
      */
-    @PostMapping
+    @PostMapping(value = {"", "/"})
     public ResponseEntity<Map<String, String>> submitBatchAttendance(
             @RequestHeader("Authorization") String authHeader,
             @RequestBody BatchAttendanceRequestDto batchRequest) {
@@ -106,7 +106,7 @@ public class AttendanceController {
     // 2. Endpoint to get the student list when a specific date is clicked
     @GetMapping("/session/{sessionId}/records")
     public ResponseEntity<List<java.util.Map<String, Object>>> getSessionAttendanceDetails(
-            @RequestHeader("Authorization") String authHeader, // 🚨 Added to pass to Identity
+            @RequestHeader("Authorization") String authHeader, //  Added to pass to Identity
             @PathVariable UUID sessionId) {
         return ResponseEntity.ok(attendanceService.getSessionAttendanceDetailsWithNames(authHeader, sessionId));
     }

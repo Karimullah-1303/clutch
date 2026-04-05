@@ -32,7 +32,7 @@ public class SecurityConfig {
                 // 1. Disable CSRF (Stateless JWT apps don't need it)
                 .csrf(csrf -> csrf.disable())
 
-                // 2. 🚨 THE CORS FIX: Point to our Bean below
+                // 2. Point to our Bean below
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 .authorizeHttpRequests(auth -> auth
@@ -61,7 +61,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // 🚨 FIX: OriginPatterns allows wildcard "*" even with credentials enabled
+        //OriginPatterns allows wildcard "*" even with credentials enabled
         config.setAllowedOriginPatterns(Collections.singletonList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept"));

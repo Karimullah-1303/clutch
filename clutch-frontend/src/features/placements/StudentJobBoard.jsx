@@ -5,7 +5,7 @@ import PrimaryButton from '../../shared/components/PrimaryButton';
 
 export default function StudentJobBoard() {
   const [jobs, setJobs] = useState([]);
-  const [applications, setApplications] = useState([]); // 🚨 NEW: Stores your application history!
+  const [applications, setApplications] = useState([]); 
   const [applyingTo, setApplyingTo] = useState(null); 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,7 +38,7 @@ export default function StudentJobBoard() {
     try {
       const response = await axios.post(`/api/v1/placement/student/jobs/${job.id}/apply/${studentId}`);
       alert(`✅ ${response.data}`);
-      fetchData(); // 🚨 NEW: Instantly refresh the data so the button turns into a status badge!
+      fetchData(); 
     } catch (error) {
       alert(`❌ ${error.response?.data || "Application failed."}`);
     } finally {
@@ -117,7 +117,7 @@ export default function StudentJobBoard() {
                   </div>
                 </div>
 
-                {/* 🚨 THE MAGIC: If applied, show the status badge. If not, show the Apply button! */}
+                
                 {myApp ? (
                   renderStatusBadge(myApp.status)
                 ) : (

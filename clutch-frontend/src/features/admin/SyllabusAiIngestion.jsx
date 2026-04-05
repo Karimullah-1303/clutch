@@ -29,7 +29,7 @@ export default function SyllabusAiIngestion() {
     }
   };
 
-  // 🚨 THE REAL CALL TO YOUR SPRING BOOT GEMINI ENDPOINT 🚨
+
   const handleAiExtraction = async () => {
     if (!file || !selectedSubject) return alert("Select a subject and upload a PDF.");
     

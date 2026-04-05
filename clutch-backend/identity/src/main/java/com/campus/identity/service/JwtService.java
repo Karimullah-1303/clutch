@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
     // Highly sensitive symmetric key used to sign and verify token.
-    private static final String secret = "VGhpcyBpcyBhIHNlY3VyZSBrZXkgZm9yIEpXVCBzaWduYXR1cmUgMjU2IGJpdHM=";
+    @Value("${jwt.secret}")
+    private String secret;
 
     /**
      * Generates a new JWT for an authenticated user, injecting custom claims (Role, CollegeId)

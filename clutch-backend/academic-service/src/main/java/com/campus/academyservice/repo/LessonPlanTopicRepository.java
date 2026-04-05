@@ -15,7 +15,7 @@ public interface LessonPlanTopicRepository extends JpaRepository<LessonPlanTopic
     List<LessonPlanTopic> findByLessonPlanId(UUID lessonPlanId);
     Optional<LessonPlanTopic> findByLessonPlanIdAndTopicId(UUID lessonPlanId, UUID topicId);
 
-    // 🚨 THE NEW GLOBAL AGGREGATOR QUERY 🚨
+    // THE NEW GLOBAL AGGREGATOR QUERY
     @Query("SELECT DISTINCT lpt.topicId FROM LessonPlanTopic lpt " +
             "JOIN LessonPlan lp ON lpt.lessonPlanId = lp.id " +
             "WHERE lp.subjectCode = :subjectCode " +

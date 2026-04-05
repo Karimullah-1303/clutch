@@ -29,3 +29,5 @@ spring:
     schemas: placement_schema
 
 debug: true
+jwt:
+  secret: ${JWT_SECRET}

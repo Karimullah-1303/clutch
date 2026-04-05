@@ -14,7 +14,7 @@ public class AiSyllabusController {
 
     private final AiSyllabusService aiSyllabusService;
 
-    // 🚨 1. RECEIVES THE PDF AND RUNS GEMINI 🚨
+    //  1. RECEIVES THE PDF AND RUNS GEMINI
     @PostMapping("/ai-extract")
     public ResponseEntity<String> extractSyllabus(
             @RequestParam("subjectCode") String subjectCode,
@@ -28,7 +28,7 @@ public class AiSyllabusController {
         }
     }
 
-    // 🚨 2. SAVES THE APPROVED DATA TO POSTGRES 🚨
+    //  2. SAVES THE APPROVED DATA TO POSTGRES
     @PostMapping("/ai-publish")
     public ResponseEntity<String> publishSyllabus(@RequestBody String verifiedJsonPayload) {
         aiSyllabusService.publishToDatabase(verifiedJsonPayload);

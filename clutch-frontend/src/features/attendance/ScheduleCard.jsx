@@ -12,7 +12,7 @@ export default function ScheduleCard({
   currentDate, 
   buttonConfig,
   subjectCode, 
-  syllabusProgress, // 🚨 NEW PROP ADDED
+  syllabusProgress, 
   onOpenLessonPlan 
 }) {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ export default function ScheduleCard({
               <MapPin size={14} />
               <span className="font-medium">{section}</span>
             </div>
-            {/* 🚨 THE UPDATED DYNAMIC PROGRESS INDICATOR 🚨 */}
+            {/*  THE UPDATED DYNAMIC PROGRESS INDICATOR */}
             <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border transition-colors ${syllabusProgress > 0 ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
               <BookOpen size={12} />
               <span>Syllabus: {syllabusProgress !== undefined ? `${syllabusProgress}%` : '--'}</span>

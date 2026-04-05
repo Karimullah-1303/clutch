@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import CsvUploader from '../features/admin/CsvUploader';
 import PlacementControlCenter from '../features/admin/PlacementControlCenter'; 
 import DepartmentHealthView from '../features/admin/DepartmentHealthView'; 
-import SyllabusAiIngestion from '../features/admin/SyllabusAiIngestion'; // 🚨 IMPORT THE AI UI!
+import SyllabusAiIngestion from '../features/admin/SyllabusAiIngestion';
 import { Database, Briefcase, Activity, Sparkles } from 'lucide-react'; 
 
 export default function AdminDashboard() {
@@ -25,7 +25,7 @@ export default function AdminDashboard() {
           <Activity size={18} /> Academic Health
         </button>
 
-        {/* 🚨 THE NEW AI TAB 🚨 */}
+        {/*  THE NEW AI TAB  */}
         <button onClick={() => setActiveTab('ai-syllabus')} className={`flex items-center gap-2 px-4 py-3 font-bold text-sm transition-colors border-b-2 ${activeTab === 'ai-syllabus' ? 'border-purple-600 text-purple-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}`}>
           <Sparkles size={18} /> AI Curriculum Engine
         </button>
@@ -43,7 +43,7 @@ export default function AdminDashboard() {
         {activeTab === 'health' && <DepartmentHealthView />}
         {activeTab === 'placement' && <PlacementControlCenter />}
         
-        {/* 🚨 RENDER THE AI COMPONENT 🚨 */}
+        {/*  RENDER THE AI COMPONENT  */}
         {activeTab === 'ai-syllabus' && <SyllabusAiIngestion />}
 
         {activeTab === 'provisioning' && (

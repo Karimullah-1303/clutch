@@ -39,13 +39,13 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
-      // 🚨 ADDED SYLLABUS PROXY 🚨
+      //  ADDED SYLLABUS PROXY 
       '/api/v1/academic/syllabus': {
         target: 'https://clutch-academic-1078092492578.asia-south1.run.app',
         changeOrigin: true,
         secure: false,
       },
-      // 🚨 ADDED LESSON PLANS PROXY 🚨
+      //  ADDED LESSON PLANS PROXY 
       '/api/v1/academic/lesson-plans': {
         target: 'https://clutch-academic-1078092492578.asia-south1.run.app',
         changeOrigin: true,

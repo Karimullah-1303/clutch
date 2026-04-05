@@ -178,7 +178,7 @@ export default function StudentDashboard() {
                       Across all subjects, you have attended <span className="text-clutch-600 font-bold">{totalAttendedOverall}</span> out of <span className="text-clutch-600 font-bold">{totalHeldOverall}</span> total classes.
                     </p>
                     <div className={`inline-block px-4 py-2 rounded-lg font-bold border ${isOverallSafe ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
-                      {isOverallSafe ? "✅ You meet the 75% university requirement." : "🚨 Warning: You are below the required attendance."}
+                      {isOverallSafe ? "✅ You meet the 75% university requirement." : "Warning: You are below the required attendance."}
                     </div>
                   </div>
                 </div>

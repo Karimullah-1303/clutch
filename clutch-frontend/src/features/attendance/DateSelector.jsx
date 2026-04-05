@@ -33,7 +33,6 @@ export default function DateSelector({ selectedDate, setSelectedDate }) {
       </button>
 
       <div className="flex items-center gap-3">
-        {/* 🚨 THE MAGIC INVISIBLE NATIVE DATE PICKER 🚨 */}
         <div className="relative bg-clutch-50 p-2 rounded-lg text-clutch-600 hover:bg-clutch-100 transition-colors cursor-pointer overflow-hidden">
           <CalendarIcon size={18} />
           <input 

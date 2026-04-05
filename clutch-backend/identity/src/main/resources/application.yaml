@@ -32,4 +32,7 @@ logging:
   level:
     org.springframework.security: DEBUG
 
+jwt:
+  secret: ${JWT_SECRET}
+
 

@@ -97,7 +97,7 @@ public class PlacementAdminService {
         app.setStatus(ApplicationStatus.valueOf(status));
         jobApplicationRepository.save(app);
 
-        // 3. 🚨 CREATE THE NOTIFICATION (Fixed ID Generation)
+        // 3. CREATE THE NOTIFICATION (Fixed ID Generation)
         try {
             Notification notification = Notification.builder()
                     // 🚨 REMOVED: .id(UUID.randomUUID())

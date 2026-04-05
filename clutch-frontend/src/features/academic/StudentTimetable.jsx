@@ -6,7 +6,7 @@ export default function StudentTimetable() {
   const [schedule, setSchedule] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Keep the UI tabs as full names
+
   const daysOfWeek = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
   
   // Map the full names to the 3-letter database codes
@@ -43,7 +43,7 @@ export default function StudentTimetable() {
     }
   };
 
-  // 🚨 THE FIX: Translate the selected UI tab to the 3-letter DB code before filtering
+  
   const dailyClasses = schedule
     .filter(cls => cls.dayOfWeek?.toUpperCase() === dbDayMap[selectedDay])
     .sort((a, b) => a.startTime.localeCompare(b.startTime));

@@ -15,7 +15,7 @@ public class AdminAllocationController {
     private final SectionSubjectAllocationRepository allocationRepository;
 
     // POST /api/v1/academic/admin/allocations
-    @PostMapping
+    @PostMapping(value = {"", "/"})
     public ResponseEntity<SectionSubjectAllocation> createAllocation(@RequestBody AllocationRequest request) {
         SectionSubjectAllocation allocation = SectionSubjectAllocation.builder()
                 .sectionName(request.getSectionName())

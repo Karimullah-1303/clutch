@@ -1,0 +1,74 @@
+
+services:
+  # 1. Identity Service
+  identity-service:
+    build:
+      context: ./clutch-backend/identity
+      dockerfile: Dockerfile
+    image: clutch-identity:latest
+    container_name: clutch-identity
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET_KEY}
+    networks:
+      - clutch-network
+
+  # 2. Academic Service
+  academic-service:
+    build:
+      context: ./clutch-backend/academic-service
+      dockerfile: Dockerfile
+    image: clutch-academic:latest
+    container_name: clutch-academic
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    networks:
+      - clutch-network
+
+  # 3. Placement Service
+  placement-service:
+    build:
+      context: ./clutch-backend/placement-service
+      dockerfile: Dockerfile
+    image: clutch-placement:latest
+    container_name: clutch-placement
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET_KEY}
+    networks:
+      - clutch-network
+
+  # 4. The React Frontend
+  frontend:
+    build:
+      context: ./clutch-frontend
+      dockerfile: Dockerfile
+    image: clutch-frontend:latest
+    container_name: clutch-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - identity-service
+      - academic-service
+      - placement-service
+    networks:
+      - clutch-network
+
+# Define internal networking
+networks:
+  clutch-network:
+    driver: bridge

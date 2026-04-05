@@ -141,7 +141,7 @@ public class LessonPlanService {
         finalTodaysTargets.addAll(carryoverTopics);
         finalTodaysTargets.addAll(freshTargets);
 
-        // 🚨 THE FIX: Pass every target through the True Time-Series Pacer!
+        // Pass every target through the True Time-Series Pacer!
         for (TopicDto target : finalTodaysTargets) {
             applyTimeSeriesPacing(target, subjectCode, sectionName);
         }
@@ -155,7 +155,7 @@ public class LessonPlanService {
                 .build();
     }
 
-    // 🚨 THE TEACHER PACING CALCULATOR 🚨
+    //  THE TEACHER PACING CALCULATOR
     private void applyTimeSeriesPacing(TopicDto dto, String subjectCode, String sectionName) {
         if (dto.getTargetLectureNumber() == null || dto.getTargetLectureNumber() == 0) {
             dto.setPacingStatus("UNMAPPED");

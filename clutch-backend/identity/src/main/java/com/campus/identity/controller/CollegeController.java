@@ -20,7 +20,7 @@ public class CollegeController {
 
     private final CollegeService collegeService;
 
-    @PostMapping
+    @PostMapping(value = {"" , "/"})
     public ResponseEntity<College> createCollege(@Valid @RequestBody CollegeDto request) {
         College newCollege = collegeService.createCollege(request.getName(), request.getDomain());
         return ResponseEntity.status(HttpStatus.CREATED).body(newCollege);

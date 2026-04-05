@@ -38,7 +38,7 @@ export default function PlacementControlCenter() {
   const handleCreateJob = async (e) => {
     e.preventDefault();
     try {
-      // 🚨 FIX: Create a payload copy and append the End-Of-Day time for Java's LocalDateTime
+      // Create a payload copy and append the End-Of-Day time for Java's LocalDateTime
       const payload = {
         ...formData,
         applicationDeadline: formData.applicationDeadline + "T23:59:59"
@@ -227,7 +227,7 @@ export default function PlacementControlCenter() {
                       
                       <td className="p-5">
                         <div className="flex flex-col gap-1.5">
-                          {/* 🚨 FIX: Replaced fullName with rollNumber map */}
+                          
                           <span className="font-black text-slate-900 text-lg group-hover:text-blue-700 transition-colors">
                             {app.studentProfile?.rollNumber ? `Roll No: ${app.studentProfile.rollNumber}` : 'Unknown Candidate'}
                           </span>
@@ -235,7 +235,7 @@ export default function PlacementControlCenter() {
                             <span className="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md border border-slate-200">
                               CGPA: {app.studentProfile?.cgpa || 'N/A'}
                             </span>
-                            {/* 🚨 FIX: Replaced missing department logic with Hardcoded 'Dept: CSE' */}
+                            
                             <span className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md border border-blue-100">
                               Dept: CSE
                             </span>

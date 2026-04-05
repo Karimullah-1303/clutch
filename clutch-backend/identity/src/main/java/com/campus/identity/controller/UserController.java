@@ -51,7 +51,7 @@ public class UserController {
     @PostMapping("/batch")
     public ResponseEntity<List<UserProfileDto>> getUsersByIds(@RequestBody List<UUID> userIds) {
 
-        // 🚀 BATCH FETCH: Hits the database exactly ONE time, no matter how many IDs there are!
+        // BATCH FETCH: Hits the database exactly ONE time, no matter how many IDs there are!
         List<UserProfileDto> profiles = userRepository.findAllById(userIds).stream()
                 .map(user -> UserProfileDto.builder()
                         .id(user.getId())

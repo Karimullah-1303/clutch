@@ -30,7 +30,7 @@ export default function DepartmentHealthView() {
     }
   };
 
-  // 🚨 THE ENGINE: Handles Searching, Filtering, and Sorting efficiently
+  // Handles Searching, Filtering, and Sorting efficiently
   const processedData = useMemo(() => {
     let filtered = dashboardData.filter(row => {
       const matchesSearch = row.teacherName.toLowerCase().includes(searchTerm.toLowerCase()) || 

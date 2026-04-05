@@ -34,7 +34,7 @@ public class AiSyllabusService {
     @Value("${gemini.api.key}")
     private String geminiApiKey;
 
-    // 🚨 1. THE AI EXTRACTION ENGINE 🚨
+    //  1. THE AI EXTRACTION ENGINE
     public String processPdfWithAI(MultipartFile file, String subjectCode) throws Exception {
 
         // A. Read the PDF Text
@@ -72,7 +72,7 @@ public class AiSyllabusService {
         return aiText.replaceAll("```json", "").replaceAll("```", "").trim();
     }
 
-    // 🚨 2. THE DATABASE PUBLISHER (Upsert Logic) 🚨
+    //  2. THE DATABASE PUBLISHER (Upsert Logic)
     @Transactional
     public void publishToDatabase(String verifiedJson) {
         try {

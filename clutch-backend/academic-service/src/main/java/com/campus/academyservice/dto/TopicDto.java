@@ -12,7 +12,7 @@ public class TopicDto {
     private String title;
     private String description;
 
-    private Integer targetLectureNumber; // When was this SUPPOSED to be taught?
+    private Integer targetLectureNumber;
     private String pacingStatus;
     private Integer pacingOffset;
 }

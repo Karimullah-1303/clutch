@@ -39,7 +39,7 @@ export default function TeacherAnalytics() {
     fetchAnalytics();
   }, []);
 
-  // --- DRILL DOWN 1: FETCH SESSIONS FOR A SECTION ---
+  
   const handleSectionClick = async (subjectId, sectionId, subjectName, sectionName) => {
     // Fallback key just in case IDs are missing from DTO
     const key = (subjectId && sectionId) ? `${subjectId}-${sectionId}` : `${subjectName}-${sectionName}`;
@@ -56,7 +56,7 @@ export default function TeacherAnalytics() {
     }
 
     setExpandedSectionKey(key);
-    setExpandedSessionId(null); // Reset child accordion
+    setExpandedSessionId(null); 
     setSessions([]);
     setIsLoadingSessions(true);
 
@@ -76,9 +76,9 @@ export default function TeacherAnalytics() {
     }
   };
 
-  // --- DRILL DOWN 2: FETCH RECORDS FOR A SESSION ---
+ 
   const handleSessionClick = async (sessionId, e) => {
-    e.stopPropagation(); // Stop the click from closing the parent section card!
+    e.stopPropagation(); 
     
     if (expandedSessionId === sessionId) {
       setExpandedSessionId(null);
@@ -178,7 +178,7 @@ export default function TeacherAnalytics() {
                       </div>
                     </div>
 
-                    {/* 🚨 DRILL DOWN 1: PAST SESSIONS LIST 🚨 */}
+                    
                     {isSectionExpanded && (
                       <div className="mt-4 pt-4 border-t border-slate-100 animate-fade-in" onClick={(e) => e.stopPropagation()}>
                         <h5 className="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
@@ -209,7 +209,7 @@ export default function TeacherAnalytics() {
                                      </div>
                                    </div>
 
-                                   {/* 🚨 DRILL DOWN 2: STUDENT RECORDS 🚨 */}
+                                   
                                    {isSessionExpanded && (
                                      <div className="p-3 bg-white border-t border-slate-100">
                                        {isLoadingRecords ? (

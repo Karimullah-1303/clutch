@@ -81,6 +81,7 @@ The microservice foundation makes adding new campus features highly modular.
 - [ ] **Academic Resource Hub:** Integrate Google Cloud Storage (GCS) buckets to host and serve previous year question papers and departmental study materials directly through the Academic Service.
 - [ ] **Automated CI/CD:** Implement GitHub Actions matrix strategies to build, test, and push multi-architecture Docker images directly to GCP Artifact Registry.
 - [ ] **Notification Engine:** Plug in an asynchronous message broker (Kafka) for real-time placement alerts.
+- [ ] **Production Telemetry & FinOps:** Scale the system to handle live campus traffic and deploy [Green Kube](https://github.com/Karimullah-1303/green-kube) (our custom Kubernetes operator) into the cluster to actively observe resource usage, prevent cloud waste, and optimize HPA limits in real-time.
 
 ## 👨‍💻 About the Developer
 

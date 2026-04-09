@@ -5,7 +5,6 @@
 ![PostgreSQL](https://img.shields.io/badge/Supabase-PostgreSQL-336791?style=for-the-badge&logo=postgresql)
 ![Google Cloud Run](https://img.shields.io/badge/GCP-Cloud_Run-4285F4?style=for-the-badge&logo=googlecloud)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-Tested-326CE5?style=for-the-badge&logo=kubernetes)
 ![Gemini AI](https://img.shields.io/badge/Google_Gemini-AI_Extraction-8E75B2?style=for-the-badge&logo=google)
 
 **Clutch** is a cloud-native, distributed campus super-app built to unify university operations. Engineered with a decoupled microservice architecture (Java/Spring Boot) and a React edge-routed frontend, it eliminates campus data silos by centralizing predictive attendance tracking, AI-driven placement analytics, and strict role-based identity management into a single, highly available ecosystem.
@@ -15,7 +14,51 @@ Modern university digital infrastructure is plagued by fragmented, monolithic le
 
 ## 🏗️ Advanced Architecture & Tech Stack
 
-![Clutch Architecture](images/clutch_deployment_diagram.png)
+```mermaid
+graph TD
+    subgraph "Client Tier"
+        UI["📱 React.js Frontend (Vite)"]
+    end
+
+    subgraph "Edge Network"
+        AGW["🌐 Vercel Edge Proxy (vercel.json)"]
+    end
+
+    subgraph "Google Cloud Platform (Serverless)"
+        ID["🔒 Identity Service (Port 8081)"]
+        AC["📚 Academic Service (Port 8082)"]
+        PL["💼 Placement Service (Port 8083)"]
+    end
+
+    subgraph "Managed Data Tier"
+        DB[/"🐘 Supabase PostgreSQL"/]
+    end
+
+    %% Client to Edge
+    UI -->|"HTTPS"| AGW
+
+    %% Edge Routing to Microservices
+    AGW -->|"/api/v1/auth/*"| ID
+    AGW -->|"/api/v1/academic/*"| AC
+    AGW -->|"/api/v1/placement/*"| PL
+
+    %% Microservices to Database via Connection Pooling
+    ID -->|"TCP/5432 (Hikari Pool)"| DB
+    AC -->|"TCP/5432 (Hikari Pool)"| DB
+    PL -->|"TCP/5432 (Hikari Pool)"| DB
+
+    %% Styling
+    classDef client fill:#e1f5fe,stroke:#0288d1,stroke-width:2px,color:#000
+    classDef edge fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    classDef service fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    classDef database fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+
+    class UI client;
+    class AGW edge;
+    class ID,AC,PL service;
+    class DB database;
+```
+
 
 Clutch is designed as an extensible Monorepo, allowing future modules to be plugged in seamlessly while maintaining Dev/Prod parity.
 
@@ -28,12 +71,19 @@ Clutch is designed as an extensible Monorepo, allowing future modules to be plug
 * **Container Orchestration (Docker Compose):** The entire stack (3 backend services + frontend) can be spun up locally with a single atomic command, perfectly mirroring the production environment.
 * **Cloud Deployment (GCP & Vercel):** Backend services are optimized via multi-stage Dockerfiles and deployed to Google Cloud Run for scale-to-zero serverless execution. The React UI is deployed on Vercel, utilizing `vercel.json` rewrites to act as a serverless API Gateway.
 
-## 📊 Visualizing the Ecosystem
-
+### 📊 Visualizing the Ecosystem
 Clutch provides dedicated portals tailored to distinct campus roles, driven by real-time analytics.
 
-![Clutch Dashboards](images/clutch_dashboards.png)
-> *Left: The Predictive Student Dashboard computing attendance thresholds. Right: The Administrator "God View" AI Placement Center.*
+<p align="center">
+  <img src="./images/teacher-analytics.png" alt="Teacher Analytics" width="48%">
+  &nbsp;
+  <img src="./images/admin-god-view.png" alt="Admin God View" width="48%">
+</p>
+<p align="center">
+  <img src="./images/student-dashboard.png" alt="Student Dashboard" width="48%">
+</p>
+
+*Top Left: Faculty Attendance Hub. Top Right: Administrator "God View" AI Placement Center. Bottom: Predictive Student Analytics.*
 
 ## 🚀 Getting Started (Local Dev/Prod Parity)
 

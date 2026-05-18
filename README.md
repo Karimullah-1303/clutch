@@ -1,4 +1,4 @@
-# 🎓 Clutch: Unified Campus Microservice Ecosystem
+# 🎓 Skillbridge: Unified Campus Microservice Ecosystem
 
 ![Java](https://img.shields.io/badge/Java-Spring_Boot-green?style=for-the-badge&logo=spring)
 ![React](https://img.shields.io/badge/React-Frontend-61DAFB?style=for-the-badge&logo=react)
@@ -7,10 +7,10 @@
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker)
 ![Gemini AI](https://img.shields.io/badge/Google_Gemini-AI_Extraction-8E75B2?style=for-the-badge&logo=google)
 
-**Clutch** is a cloud-native, distributed campus super-app built to unify university operations. Engineered with a decoupled microservice architecture (Java/Spring Boot) and a React edge-routed frontend, it eliminates campus data silos by centralizing predictive attendance tracking, AI-driven placement analytics, and strict role-based identity management into a single, highly available ecosystem.
+**Skillbridge** is a cloud-native, distributed campus super-app built to unify university operations. Engineered with a decoupled microservice architecture (Java/Spring Boot) and a React edge-routed frontend, it eliminates campus data silos by centralizing predictive attendance tracking, AI-driven placement analytics, and strict role-based identity management into a single, highly available ecosystem.
 
 ## 🌟 The Problem it Solves
-Modern university digital infrastructure is plagued by fragmented, monolithic legacy systems. Students and faculty navigate isolated platforms that often crash during high-traffic events (e.g., mass placement registrations). Clutch solves this by partitioning domains into isolated microservices. If the Placement Service experiences a massive traffic spike, the Academic Service remains completely unaffected.
+Modern university digital infrastructure is plagued by fragmented, monolithic legacy systems. Students and faculty navigate isolated platforms that often crash during high-traffic events (e.g., mass placement registrations). Skillbridge solves this by partitioning domains into isolated microservices. If the Placement Service experiences a massive traffic spike, the Academic Service remains completely unaffected.
 
 ## 🏗️ Advanced Architecture & Tech Stack
 
@@ -60,7 +60,7 @@ graph TD
 ```
 
 
-Clutch is designed as an extensible Monorepo, allowing future modules to be plugged in seamlessly while maintaining Dev/Prod parity.
+Skillbridge is designed as an extensible Monorepo, allowing future modules to be plugged in seamlessly while maintaining Dev/Prod parity.
 
 * **The Engine (Java/Spring Boot 3):**
   * **Domain-Driven Design:** Strictly partitioned into `identity-service`, `academic-service`, and `placement-service`.
@@ -72,7 +72,7 @@ Clutch is designed as an extensible Monorepo, allowing future modules to be plug
 * **Cloud Deployment (GCP & Vercel):** Backend services are optimized via multi-stage Dockerfiles and deployed to Google Cloud Run for scale-to-zero serverless execution. The React UI is deployed on Vercel, utilizing `vercel.json` rewrites to act as a serverless API Gateway.
 
 ### 📊 Visualizing the Ecosystem
-Clutch provides dedicated portals tailored to distinct campus roles, driven by real-time analytics.
+Skillbridge provides dedicated portals tailored to distinct campus roles, driven by real-time analytics.
 
 <p align="center">
   <img src="./images/teacher-analytics.png" alt="Teacher Analytics" width="48%">
@@ -96,8 +96,8 @@ This repository is structured as a Monorepo. Thanks to Docker Compose, you do no
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/Karimullah-1303/clutch.git
-cd clutch-campus-app
+git clone https://github.com/Karimullah-1303/Skillbridge.git
+cd Skillbridge-campus-app
 ```
 
 ### 2. Configure the Security Environment
@@ -135,7 +135,7 @@ The microservice foundation makes adding new campus features highly modular.
 
 ## 👨‍💻 About the Developer
 
-I am a 3rd-year CSE Core student based in Visakhapatnam with a deep, sustained focus on DevOps, Site Reliability Engineering (SRE), and Cloud Computing. I built Clutch to move beyond basic CRUD applications, specifically tackling real-world distributed systems challenges, configuration as code, and serverless container orchestration.
+I am a 3rd-year CSE Core student based in Visakhapatnam with a deep, sustained focus on DevOps, Site Reliability Engineering (SRE), and Cloud Computing. I built Skillbridge to move beyond basic CRUD applications, specifically tackling real-world distributed systems challenges, configuration as code, and serverless container orchestration.
 
 I am actively looking for a DevOps, SRE, or Software Engineering Internship! Let's connect:
 
